@@ -1,22 +1,28 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const isProd = false;
+const isDev = !isProd;
+const filename = (ext) => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
     output: {
-        filename: 'bundle.js',
+        filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
       new HtmlWebpackPlugin({
           template: path.resolve(__dirname, "src", "index.html")
       }),
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({
+        dry: true
+      }),
       new MiniCssExtractPlugin({
-        filename: "bundle.css"
+        filename: filename('css')
       }),
       new CopyWebpackPlugin({
         patterns: [
